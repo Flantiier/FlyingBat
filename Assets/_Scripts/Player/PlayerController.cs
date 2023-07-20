@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip jumpClip;
     [SerializeField] private AudioClip deathClip;
 
+    [Header("Inputs")]
+    [SerializeField] private bool mobileInputs;
+
     private Rigidbody2D _rb;
     private Animator _animator;
     private CircleCollider2D _collider;
@@ -34,7 +37,7 @@ public class PlayerController : MonoBehaviour
         EnablePlayer(false);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (!Enabled)
             return;
@@ -55,22 +58,46 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Inputs Methods
+    /// <summary>
+    /// Handle player inputs from mobile devices
+    /// </summary>
+    private void HandleMobileInputs()
+    {
+        if (Input.touchCount <= 0)
+            return;
+
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase == TouchPhase.Began)
+        {
+            ImpulsePlayer();
+            PlayAudio(jumpClip);
+        }
+    }
+
+    /// <summary>
+    /// Handle player inputs from computer
+    /// </summary>
+    private void HandlePCInputs()
+    {
+        if (!Input.GetMouseButtonDown(0))
+            return;
+
+        ImpulsePlayer();
+        PlayAudio(jumpClip);
+    }
+    #endregion
+
     #region Movement Methods
     /// <summary>
     /// Handle input to move the player
     /// </summary>
     private void HandleMovements()
     {
-        if (Input.touchCount >= 1)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Began)
-            {
-                ImpulsePlayer();
-                PlayAudio(jumpClip);
-            }
-        }
+        if (mobileInputs)
+            HandleMobileInputs();
+        else
+            HandlePCInputs();
 
         ClampVelocity();
     }

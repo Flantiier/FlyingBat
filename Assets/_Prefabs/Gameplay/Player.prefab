@@ -53,6 +53,7 @@ MonoBehaviour:
   maxVelocity: 10
   jumpClip: {fileID: 8300000, guid: ab8a3cad02a7efd47a7c860f2f0f79f8, type: 3}
   deathClip: {fileID: 8300000, guid: fe041fb44a15ed34e8e30bf01b68b8fb, type: 3}
+  mobileInputs: 1
 --- !u!114 &8205881207377678859
 MonoBehaviour:
   m_ObjectHideFlags: 0
