@@ -153,7 +153,7 @@ public class ObstacleGenerator : MonoBehaviour
         BoxCollider2D scoreBox = scoreZone.gameObject.AddComponent<BoxCollider2D>();
         scoreZone.gameObject.AddComponent<ScoreZone>();
         scoreZone.SetParent(parent);
-        scoreZone.localPosition = new Vector2(0.25f, 0f);
+        scoreZone.localPosition = new Vector2(0f, 0f);
         scoreBox.size = new Vector2(0.5f, gapSize);
 
         parent.SetParent(transform);
