@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Game Methods
+    #region Methods
     /// <summary>
     /// Enable player inputs and rb physics
     /// </summary>
@@ -55,6 +55,28 @@ public class PlayerController : MonoBehaviour
         Enabled = enable;
         _rb.simulated = enable;
         _collider.enabled = enable;
+
+        if(enable)
+            ImpulsePlayer();
+    }
+
+    /// <summary>
+    /// Player has collide with something
+    /// </summary>
+    public void HasCollided()
+    {
+        PlayAudio(deathClip);
+        SetAnimationToDeath(true);
+        EnablePlayer(false);
+        _rb.velocity = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Play an audio clip
+    /// </summary>
+    private void PlayAudio(AudioClip clip)
+    {
+        AudioManager.Instance.PlayClip(clip);
     }
     #endregion
 
@@ -121,25 +143,6 @@ public class PlayerController : MonoBehaviour
         float clampedY = Mathf.Clamp(_rb.velocity.y, -maxVelocity, maxVelocity);
         _rb.velocity = new Vector2(0f, clampedY);
     }
-
-    /// <summary>
-    /// Player has collide with something
-    /// </summary>
-    public void HasCollided()
-    {
-        PlayAudio(deathClip);
-        SetAnimationToDeath(true);
-        EnablePlayer(false);
-        _rb.velocity = Vector2.zero;
-    }
-
-    /// <summary>
-    /// Play an audio clip
-    /// </summary>
-    private void PlayAudio(AudioClip clip)
-    {
-        AudioManager.Instance.PlayClip(clip);
-    }
     #endregion
 
     #region Animations Methods
@@ -152,7 +155,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Set animation trigger
+    /// Set animation boolean
     /// </summary>
     public void SetAnimationToDeath(bool value)
     {

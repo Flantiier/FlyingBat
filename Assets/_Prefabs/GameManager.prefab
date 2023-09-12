@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4561105195703283290}
   - component: {fileID: 8255714149947082368}
+  - component: {fileID: 4482334822683294292}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45,6 +46,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  adPopUp: {fileID: 0}
   scoreClip: {fileID: 8300000, guid: a7ba1ed1119b91b4a8913c5e400924a7, type: 3}
   startGameEvent: {fileID: 11400000, guid: 9ecb7abb467e6224dbf5a2bc8137f77d, type: 2}
-  endGameEvent: {fileID: 11400000, guid: 243c4d5187598b44196abd72cfd50bff, type: 2}
+  backToMenuEvent: {fileID: 11400000, guid: 243c4d5187598b44196abd72cfd50bff, type: 2}
+--- !u!114 &4482334822683294292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6040790721614796574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb905a8c815684b4dae6d310249709a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

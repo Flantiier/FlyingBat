@@ -6,6 +6,7 @@ public class BannerAd : MonoBehaviour
     #region Variables
     [SerializeField] private string androidAdUnitId;
     [SerializeField] private string iosAdUnitId;
+    [SerializeField] private bool loadBannerAtStart = true;
 
     private string _adUnitId;
     BannerPosition _bannerPosition = BannerPosition.BOTTOM_CENTER;
@@ -21,6 +22,9 @@ public class BannerAd : MonoBehaviour
 #endif
 
         Advertisement.Banner.SetPosition(_bannerPosition);
+
+        if (loadBannerAtStart)
+            LoadBanner();
     }
     #endregion
 

@@ -4,28 +4,30 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     #region Variables
-    [Header("Game properties")]
+    [Header("References")]
     [SerializeField] private Transform player;
+    [SerializeField] private RewardedAdPopUp adPopUp;
 
     [Header("Score Audio")]
-    [SerializeField] private AudioClip scoreClip; 
+    [SerializeField] private AudioClip scoreClip;
 
     private const string SCORE_KEY = "HIGHER_SCORE";
+    private bool _playedRewardedAd = false;
+    #endregion
+
+    #region Events
+    [Header("Events")]
+    [SerializeField] private GameEvent startGameEvent;
+    [SerializeField] private GameEvent backToMenuEvent;
+
+    public event Action OnScoreModified;
+    public event Action OnNewHigherScore;
     #endregion
 
     #region Properties
     public int Score { get; private set; }
     public string ScoreKey => SCORE_KEY;
     public static GameManager Instance { get; private set; }
-    #endregion
-
-    #region Events
-    [Header("Events")]
-    [SerializeField] private GameEvent startGameEvent;
-    [SerializeField] private GameEvent endGameEvent;
-
-    public event Action OnScoreModified;
-    public event Action OnNewHigherScore;
     #endregion
 
     #region Builts_In
@@ -39,23 +41,23 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerController.OnPlayerCollided += EndGame;
+        PlayerController.OnPlayerCollided += PlayerDeathListener;
     }
 
     private void OnDisable()
     {
-        PlayerController.OnPlayerCollided -= EndGame;
+        PlayerController.OnPlayerCollided -= PlayerDeathListener;
     }
     #endregion
 
     #region Methods
     /// <summary>
-    /// Initialize game properties
+    /// Reset elements to display the menu
     /// </summary>
-    public void InitializeGame()
+    private void ResetPlayerPosition()
     {
-        player.GetComponent<PlayerController>().ImpulsePlayer();
-        SetScore(0);
+        player.position = Vector2.zero;
+        player.GetComponent<PlayerController>().SetAnimationToDeath(false);
     }
 
     /// <summary>
@@ -104,34 +106,45 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region Menu Methods
-    /// <summary>
-    /// Reset elements to display the menu
-    /// </summary>
-    private void ResetToMenu()
-    {
-        player.position = Vector2.zero;
-        player.GetComponent<PlayerController>().SetAnimationToDeath(false);
-    }
-    #endregion
-
     #region Game Methods
     /// <summary>
-    /// Trigger start game event
+    /// Select between ending the game or show an add to continue, subscribed to player collide event
+    /// </summary>
+    public void PlayerDeathListener()
+    {
+        int higherScore = !PlayerPrefs.HasKey(SCORE_KEY) ? 0 : PlayerPrefs.GetInt(SCORE_KEY);
+
+        //Fairly high Score to trigger an add & already not played
+        if (Score < higherScore/* && Score >= 5*/)
+        {
+            adPopUp.gameObject.SetActive(true);
+            _playedRewardedAd = true;
+            return;
+        }
+
+        //Already showed and end level
+        GameOver();
+        _playedRewardedAd = false;
+    }
+
+    /// <summary>
+    /// Trigger an event that start the game
     /// </summary>
     public void StartGame()
     {
+        SetScore(0);
         startGameEvent.Raise();
     }
-    
+
     /// <summary>
-    /// Trigger end game event
+    /// Trigger an event to going back to the menu
     /// </summary>
-    public void EndGame()
+    public void GameOver()
     {
+        //Save score and return to menu
         SaveScore();
-        ResetToMenu();
-        endGameEvent.Raise();
+        ResetPlayerPosition();
+        backToMenuEvent.Raise();
     }
 
     /// <summary>
@@ -140,6 +153,13 @@ public class GameManager : MonoBehaviour
     public void QuitApplication()
     {
         Application.Quit();
+    }
+    #endregion
+
+    #region Game Bonus
+    public void SecondChance()
+    {
+        Debug.Log("Continue the current run!");
     }
     #endregion
 }

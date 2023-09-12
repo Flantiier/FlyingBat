@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BackgrounGenerator : MonoBehaviour
+public class BackgroundGenerator : MonoBehaviour
 {
     #region Variables
     [Header("Background References")]

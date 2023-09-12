@@ -34,7 +34,7 @@ public class ObstacleGenerator : MonoBehaviour
     }
     #endregion
 
-    #region GameMethods
+    #region Game Methods
     /// <summary>
     /// Start the generation Coroutine
     /// </summary>
